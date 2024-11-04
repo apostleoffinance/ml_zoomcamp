@@ -1,6 +1,7 @@
 
-customer = {
-    "gender": 'female',
+
+{
+    "gender": "female",
     "seniorcitizen": 0,
     "partner": "yes",
     "dependents": "no",
@@ -22,5 +23,4 @@ customer = {
 }
 
 
-print('input', customer)
-print('churn probability', y_pred)
+
