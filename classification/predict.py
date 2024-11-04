@@ -5,37 +5,34 @@ import numpy as np
 
 from flask import Flask, request, jsonify
 
-def predict_single(customer, dv, model):
-    X = dv.transform([customer])
-    y_pred = model.predict_proba(X)[:, 1]
-    return y_pred[0]
-
-
-with open('churn-model.bin', 'rb') as f_in:
+ 
+model_file = 'model_C=1.0.bin'
+ 
+with open(model_file, 'rb') as f_in:
     dv, model = pickle.load(f_in)
-
-
+ 
 app = Flask('churn')
-
-
+ 
 @app.route('/predict', methods=['POST'])
 def predict():
+    # json = Python dictionary
     customer = request.get_json()
-
-    prediction = predict_single(customer, dv, model)
-    churn = prediction >= 0.5
-    
+ 
+    X = dv.transform([customer])
+    model.predict_proba(X)
+    y_pred = model.predict_proba(X)[0,1] 
+    churn = y_pred >= 0.5
+ 
     result = {
-        'churn_probability': float(prediction),
-        'churn': bool(churn),
+        # the next line raises an error so we need to change it
+        #'churn_probability': y_pred,
+        'churn_probability': float(y_pred),
+        # the next line raises an error so we need to change it
+        #'churn': churn
+        'churn': bool(churn)
     }
-
-    return jsonify(result)
-
-
-if __name__ == '__main__':
+ 
+    return jsonify(result) 
+ 
+if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=9696)
-
-
-
-

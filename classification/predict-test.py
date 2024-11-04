@@ -23,14 +23,14 @@ customer = {
     "paymentmethod": "electronic_check",
     "tenure": 1,
     "monthlycharges": 29.85,
-    "totalcharges": (24 * 29.85)
+    "totalcharges": 29.85
 }
 
 response = requests.post(url, json = customer).json()
-response
+print(response)
 
 if response['churn'] == True:
-    print('sending promo email to %s' % ('xyz-123'))
+    print('sending promo email to %s' % customer_id)
 else:
     print('not sending promo email to %s' % customer_id)
 
